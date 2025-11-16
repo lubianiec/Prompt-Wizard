@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { InputMode, PromptStructure, GenerationType } from './types';
 import Header from './components/Header';
 import InputPanel from './components/InputPanel';
@@ -13,6 +13,8 @@ import {
 } from './services/geminiService';
 import { fileToBase64 } from './utils/fileUtils';
 import { useLanguage } from './contexts/LanguageContext';
+import Loader from './components/Loader';
+import { SparklesIcon } from './components/icons/Icons';
 
 const App: React.FC = () => {
   const [inputMode, setInputMode] = useState<InputMode>(InputMode.TEXT);
@@ -22,6 +24,27 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [outputTitle, setOutputTitle] = useState<string>('');
   const { t } = useLanguage();
+
+  const [isKeyReady, setIsKeyReady] = useState(false);
+  const [isCheckingKey, setIsCheckingKey] = useState(true);
+
+  useEffect(() => {
+    const checkKey = async () => {
+      setIsCheckingKey(true);
+      if (await window.aistudio.hasSelectedApiKey()) {
+        setIsKeyReady(true);
+      }
+      setIsCheckingKey(false);
+    };
+    checkKey();
+  }, []);
+
+  const handleSelectKey = async () => {
+    await window.aistudio.openSelectKey();
+    // Optimistically set to true to avoid race conditions where `hasSelectedApiKey`
+    // might not immediately return true after the dialog closes.
+    setIsKeyReady(true); 
+  };
 
   const handleGenerate = useCallback(async (
     type: GenerationType, 
@@ -80,7 +103,12 @@ const App: React.FC = () => {
     } catch (e: unknown) {
       console.error(e);
       if (e instanceof Error) {
-        setError(`${t('errorPrefix')}: ${e.message}`);
+        if (e.message.includes('Requested entity was not found')) {
+            setError(t('errorInvalidApiKey'));
+            setIsKeyReady(false);
+        } else {
+            setError(`${t('errorPrefix')}: ${e.message}`);
+        }
       } else {
         setError(t('errorUnknown'));
       }
@@ -89,6 +117,40 @@ const App: React.FC = () => {
       setIsLoading(false);
     }
   }, [inputMode, t]);
+  
+  const raisedButtonShadow = "shadow-[5px_5px_10px_#1b1825,-5px_-5px_10px_#3b364f] hover:shadow-[2px_2px_5px_#1b1825,-2px_-2px_5px_#3b364f] active:shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f] disabled:shadow-none";
+
+  if (isCheckingKey) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#201D2B]">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!isKeyReady) {
+    return (
+      <div className="min-h-screen font-sans flex items-center justify-center bg-[#201D2B] p-4">
+        <div className="bg-[#2B273A] rounded-3xl shadow-[8px_8px_16px_#1b1825,-8px_-8px_16px_#3b364f] w-full max-w-md text-center p-8">
+            <SparklesIcon className="h-16 w-16 text-[#F0C38E] opacity-50 mb-4 mx-auto" />
+            <h1 className="text-2xl font-bold text-[#F0F0F0] mb-2">{t('apiKeyTitle')}</h1>
+            <p className="text-[#F0F0F0]/70 mb-4">{t('apiKeyDescription')}</p>
+            <p className="text-xs text-[#F0F0F0]/50 mb-6">
+                {t('apiKeyBillingPre')}{' '}
+                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#F0C38E]">
+                    {t('apiKeyBillingLink')}
+                </a>.
+            </p>
+             <button
+                onClick={handleSelectKey}
+                className={`w-full font-bold py-3 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
+            >
+                {t('apiKeyButton')}
+            </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen font-sans flex flex-col bg-[#201D2B] text-[#F0F0F0]">

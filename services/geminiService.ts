@@ -1,12 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { PromptStructure, Locale } from '../types';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
@@ -67,6 +61,7 @@ Do not include any other text, greetings, or explanations outside of this struct
 
 
 export const generatePromptFromImage = async (base64Image: string, mimeType: string, locale: Locale): Promise<PromptStructure> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const systemInstruction = getSystemInstruction('structure', locale);
 
@@ -84,6 +79,7 @@ export const generatePromptFromImage = async (base64Image: string, mimeType: str
 };
 
 export const generatePromptFromText = async (inputText: string, locale: Locale): Promise<PromptStructure> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const systemInstruction = getSystemInstruction('structure', locale, 'text');
 
   const response = await ai.models.generateContent({
@@ -100,6 +96,7 @@ export const generatePromptFromText = async (inputText: string, locale: Locale):
 };
 
 export const generateCompactPromptFromText = async (inputText: string, locale: Locale): Promise<string> => {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const systemInstruction = getSystemInstruction('compact', locale, 'text');
   
     const response = await ai.models.generateContent({
@@ -112,6 +109,7 @@ export const generateCompactPromptFromText = async (inputText: string, locale: L
 };
   
 export const generateCompactPromptFromImage = async (base64Image: string, mimeType: string, locale: Locale): Promise<string> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const systemInstruction = getSystemInstruction('compact', locale);
 
@@ -125,6 +123,7 @@ export const generateCompactPromptFromImage = async (base64Image: string, mimeTy
 };
 
 export const generateVideoPromptFromImageAndText = async (base64Image: string, mimeType: string, videoDescription: string, locale: Locale, includeImageDetails?: boolean): Promise<string> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const textPart = { text: `User's video scene description: "${videoDescription}"` }
   const systemInstruction = getSystemInstruction('video', locale, undefined, includeImageDetails);
@@ -139,6 +138,7 @@ export const generateVideoPromptFromImageAndText = async (base64Image: string, m
 }
 
 export const generateProfessionalPromptFromText = async (inputText: string, locale: Locale): Promise<string> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const systemInstruction = getSystemInstruction('professional', locale);
 
   const response = await ai.models.generateContent({
