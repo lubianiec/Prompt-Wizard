@@ -46,14 +46,17 @@ export const translations = {
       errorNoInput: 'Brak prawidłowych danych wejściowych.',
       errorPrefix: 'Wystąpił błąd',
       errorUnknown: 'Wystąpił nieznany błąd.',
-      errorInvalidApiKey: 'Twój klucz API jest nieprawidłowy. Proszę wybrać prawidłowy klucz, aby kontynuować.',
+      errorInvalidApiKey: 'Twój klucz API jest nieprawidłowy lub nie został podany. Proszę wprowadzić prawidłowy klucz, aby kontynuować.',
 
       // API Key Screen
       apiKeyTitle: 'Wymagany Klucz API',
-      apiKeyDescription: 'Aby korzystać z Prompt Wizard, musisz wybrać klucz API Google AI Studio. Umożliwi to aplikacji połączenie z modelem Gemini.',
+      apiKeyDescription: 'Aby korzystać z Prompt Wizard, musisz podać klucz API Google AI Studio. Umożliwi to aplikacji połączenie z modelem Gemini.',
       apiKeyBillingPre: 'Korzystanie z Gemini API może wiązać się z kosztami. Proszę zapoznać się z',
       apiKeyBillingLink: 'informacjami o rozliczeniach',
-      apiKeyButton: 'Wybierz Klucz API',
+      apiKeyButton: 'Wybierz Klucz API (AI Studio)',
+      apiKeyInputPlaceholder: 'Wprowadź swój klucz API Google Gemini',
+      apiKeySaveButton: 'Zapisz i Kontynuuj',
+      apiKeyDivider: 'LUB',
     },
   },
   en: {
@@ -103,14 +106,17 @@ export const translations = {
       errorNoInput: 'No valid input provided.',
       errorPrefix: 'An error occurred',
       errorUnknown: 'An unknown error occurred.',
-      errorInvalidApiKey: 'Your API Key is invalid. Please select a valid key to continue.',
+      errorInvalidApiKey: 'Your API Key is invalid or missing. Please enter a valid key to continue.',
       
       // API Key Screen
       apiKeyTitle: 'API Key Required',
-      apiKeyDescription: 'To use Prompt Wizard, you need to select a Google AI Studio API key. This enables the app to connect to the Gemini model.',
+      apiKeyDescription: 'To use Prompt Wizard, you need to provide a Google AI Studio API key. This enables the app to connect to the Gemini model.',
       apiKeyBillingPre: 'Using the Gemini API may incur costs. Please review the',
       apiKeyBillingLink: 'billing information',
-      apiKeyButton: 'Select API Key',
+      apiKeyButton: 'Select API Key (AI Studio)',
+      apiKeyInputPlaceholder: 'Enter your Google Gemini API Key',
+      apiKeySaveButton: 'Save & Continue',
+      apiKeyDivider: 'OR',
     },
   },
 };

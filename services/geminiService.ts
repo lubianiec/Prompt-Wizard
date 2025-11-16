@@ -1,6 +1,17 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { PromptStructure, Locale } from '../types';
 
+const getGeminiClient = () => {
+  const apiKeyFromSession = sessionStorage.getItem('gemini_api_key');
+  const apiKey = apiKeyFromSession || process.env.API_KEY;
+
+  if (!apiKey) {
+    throw new Error("API Key not found. Please provide one.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
+
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
@@ -47,8 +58,6 @@ Do not include any other text, greetings, or explanations outside of this struct
         }
     };
 
-    // FIX: The 'pl' instruction set is empty, causing a type error. As per comments,
-    // prompt generation is done in English, so we'll use the 'en' set directly.
     const langInstructions = instructions.en;
 
     if (task === 'video' && includeImageDetails) {
@@ -61,7 +70,7 @@ Do not include any other text, greetings, or explanations outside of this struct
 
 
 export const generatePromptFromImage = async (base64Image: string, mimeType: string, locale: Locale): Promise<PromptStructure> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getGeminiClient();
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const systemInstruction = getSystemInstruction('structure', locale);
 
@@ -79,7 +88,7 @@ export const generatePromptFromImage = async (base64Image: string, mimeType: str
 };
 
 export const generatePromptFromText = async (inputText: string, locale: Locale): Promise<PromptStructure> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getGeminiClient();
   const systemInstruction = getSystemInstruction('structure', locale, 'text');
 
   const response = await ai.models.generateContent({
@@ -96,7 +105,7 @@ export const generatePromptFromText = async (inputText: string, locale: Locale):
 };
 
 export const generateCompactPromptFromText = async (inputText: string, locale: Locale): Promise<string> => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = getGeminiClient();
     const systemInstruction = getSystemInstruction('compact', locale, 'text');
   
     const response = await ai.models.generateContent({
@@ -109,7 +118,7 @@ export const generateCompactPromptFromText = async (inputText: string, locale: L
 };
   
 export const generateCompactPromptFromImage = async (base64Image: string, mimeType: string, locale: Locale): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getGeminiClient();
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const systemInstruction = getSystemInstruction('compact', locale);
 
@@ -123,7 +132,7 @@ export const generateCompactPromptFromImage = async (base64Image: string, mimeTy
 };
 
 export const generateVideoPromptFromImageAndText = async (base64Image: string, mimeType: string, videoDescription: string, locale: Locale, includeImageDetails?: boolean): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getGeminiClient();
   const imagePart = { inlineData: { data: base64Image, mimeType } };
   const textPart = { text: `User's video scene description: "${videoDescription}"` }
   const systemInstruction = getSystemInstruction('video', locale, undefined, includeImageDetails);
@@ -138,7 +147,7 @@ export const generateVideoPromptFromImageAndText = async (base64Image: string, m
 }
 
 export const generateProfessionalPromptFromText = async (inputText: string, locale: Locale): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getGeminiClient();
   const systemInstruction = getSystemInstruction('professional', locale);
 
   const response = await ai.models.generateContent({

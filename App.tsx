@@ -27,20 +27,24 @@ const App: React.FC = () => {
 
   const [isKeyReady, setIsKeyReady] = useState(false);
   const [isCheckingKey, setIsCheckingKey] = useState(true);
+  const [apiKeyInput, setApiKeyInput] = useState('');
 
   useEffect(() => {
     const checkKey = async () => {
-      // No need to set isCheckingKey to true here, it's already true initially.
+      setIsCheckingKey(true);
       try {
-        if (await window.aistudio.hasSelectedApiKey()) {
+        const storedKey = sessionStorage.getItem('gemini_api_key');
+        if (storedKey) {
           setIsKeyReady(true);
+        } else if (typeof window.aistudio?.hasSelectedApiKey === 'function' && await window.aistudio.hasSelectedApiKey()) {
+          setIsKeyReady(true);
+        } else {
+          setIsKeyReady(false);
         }
       } catch (e) {
         console.error("Error checking for API key:", e);
-        // Assume no key is ready if an error occurs.
         setIsKeyReady(false);
       } finally {
-        // This is crucial: always stop checking, even if there was an error.
         setIsCheckingKey(false);
       }
     };
@@ -49,10 +53,16 @@ const App: React.FC = () => {
 
   const handleSelectKey = async () => {
     await window.aistudio.openSelectKey();
-    // Optimistically set to true to avoid race conditions where `hasSelectedApiKey`
-    // might not immediately return true after the dialog closes.
     setIsKeyReady(true); 
   };
+  
+  const handleSaveKey = () => {
+    if (apiKeyInput.trim()) {
+      sessionStorage.setItem('gemini_api_key', apiKeyInput.trim());
+      setIsKeyReady(true);
+      setApiKeyInput('');
+    }
+  }
 
   const handleGenerate = useCallback(async (
     type: GenerationType, 
@@ -111,7 +121,8 @@ const App: React.FC = () => {
     } catch (e: unknown) {
       console.error(e);
       if (e instanceof Error) {
-        if (e.message.includes('Requested entity was not found')) {
+        if (e.message.includes('API key not valid') || e.message.includes('Requested entity was not found')) {
+            sessionStorage.removeItem('gemini_api_key');
             setError(t('errorInvalidApiKey'));
             setIsKeyReady(false);
         } else {
@@ -126,7 +137,8 @@ const App: React.FC = () => {
     }
   }, [inputMode, t]);
   
-  const raisedButtonShadow = "shadow-[5px_5px_10px_#1b1825,-5px_-5px_10px_#3b364f] hover:shadow-[2px_2px_5px_#1b1825,-2px_-2px_5px_#3b364f] active:shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f] disabled:shadow-none";
+  const raisedButtonShadow = "shadow-[5px_5px_10px_#1b1825,-5px_-5px_10px_#3b364f] hover:shadow-[2px_2px_5px_#1b1825,-2px_-2px_5px_#3b364f] active:shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f] disabled:shadow-none disabled:opacity-50 disabled:cursor-not-allowed";
+  const insetStyle = "shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f]";
 
   if (isCheckingKey) {
     return (
@@ -142,19 +154,47 @@ const App: React.FC = () => {
         <div className="bg-[#2B273A] rounded-3xl shadow-[8px_8px_16px_#1b1825,-8px_-8px_16px_#3b364f] w-full max-w-md text-center p-8">
             <SparklesIcon className="h-16 w-16 text-[#F0C38E] opacity-50 mb-4 mx-auto" />
             <h1 className="text-2xl font-bold text-[#F0F0F0] mb-2">{t('apiKeyTitle')}</h1>
-            <p className="text-[#F0F0F0]/70 mb-4">{t('apiKeyDescription')}</p>
-            <p className="text-xs text-[#F0F0F0]/50 mb-6">
+            <p className="text-[#F0F0F0]/70 mb-6">{t('apiKeyDescription')}</p>
+            
+            <div className="space-y-4">
+                <input
+                    type="password"
+                    value={apiKeyInput}
+                    onChange={(e) => setApiKeyInput(e.target.value)}
+                    placeholder={t('apiKeyInputPlaceholder')}
+                    className={`w-full p-4 bg-[#2B273A] rounded-2xl border-none focus:outline-none focus:shadow-[inset_3px_3px_7px_#1b1825,inset_-3px_-3px_7px_#3b364f] transition-shadow resize-none text-[#F0F0F0] placeholder:text-[#F0F0F0]/40 ${insetStyle}`}
+                />
+                <button
+                    onClick={handleSaveKey}
+                    disabled={!apiKeyInput.trim()}
+                    className={`w-full font-bold py-3 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
+                >
+                    {t('apiKeySaveButton')}
+                </button>
+            </div>
+
+            {typeof window.aistudio?.openSelectKey === 'function' && (
+                <>
+                    <div className="my-6 flex items-center">
+                        <div className="flex-grow border-t border-[#F0F0F0]/20"></div>
+                        <span className="flex-shrink mx-4 text-xs font-semibold text-[#F0F0F0]/50">{t('apiKeyDivider')}</span>
+                        <div className="flex-grow border-t border-[#F0F0F0]/20"></div>
+                    </div>
+                    <button
+                        onClick={handleSelectKey}
+                        className={`w-full font-bold py-3 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 bg-[#5e5a77] text-[#F0F0F0] ${raisedButtonShadow}`}
+                    >
+                        {t('apiKeyButton')}
+                    </button>
+                </>
+            )}
+
+            <p className="text-xs text-[#F0F0F0]/50 mt-8">
                 {t('apiKeyBillingPre')}{' '}
                 <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#F0C38E]">
                     {t('apiKeyBillingLink')}
                 </a>.
             </p>
-             <button
-                onClick={handleSelectKey}
-                className={`w-full font-bold py-3 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
-            >
-                {t('apiKeyButton')}
-            </button>
         </div>
       </div>
     )
