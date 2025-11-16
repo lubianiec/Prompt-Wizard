@@ -91,7 +91,7 @@ const App: React.FC = () => {
   }, [inputMode, t]);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-gray-300 font-sans flex flex-col">
+    <div className="min-h-screen font-sans flex flex-col bg-[#201D2B] text-[#F0F0F0]">
       <Header />
       <main className="flex-grow container mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <InputPanel
@@ -109,7 +109,7 @@ const App: React.FC = () => {
           outputTitle={outputTitle}
         />
       </main>
-      <footer className="text-center p-4 text-gray-600 text-sm">
+      <footer className="text-center p-4 text-[#F0F0F0]/50 text-sm">
         <p>Powered by Google Gemini. Design by lubianiec.</p>
       </footer>
     </div>

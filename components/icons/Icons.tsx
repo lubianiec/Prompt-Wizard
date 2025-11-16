@@ -51,3 +51,24 @@ export const LayersIcon: React.FC<IconProps> = ({ className = "h-5 w-5" }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 1V4a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2z" />
     </svg>
 );
+
+// FIX: Add missing PolishFlagIcon and UKFlagIcon components.
+export const PolishFlagIcon: React.FC<IconProps> = ({ className = "h-6 w-6" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5" className={className}>
+    <rect width="8" height="5" fill="#fff"/>
+    <rect width="8" height="2.5" y="2.5" fill="#dc143c"/>
+  </svg>
+);
+
+export const UKFlagIcon: React.FC<IconProps> = ({ className = "h-6 w-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" className={className}>
+        <clipPath id="uk-flag-s">
+            <path d="M0,0 v15 h30 z M30,15 v15 h30 z M30,15 h-30 v-15 z M0,15 h30 v-15 z" />
+        </clipPath>
+        <path d="M0,0 h60 v30 h-60 z" fill="#00247d" />
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#cf142b" strokeWidth="4" clipPath="url(#uk-flag-s)" />
+        <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
+        <path d="M30,0 v30 M0,15 h60" stroke="#cf142b" strokeWidth="6" />
+    </svg>
+);

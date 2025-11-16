@@ -53,18 +53,22 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
   }
   
   const tabClass = (tabMode: InputMode) => 
-    `flex-1 py-3 px-4 text-center font-semibold transition-colors duration-300 rounded-t-lg flex items-center justify-center gap-2 ${
-      mode === tabMode ? 'bg-zinc-800 text-white' : 'bg-zinc-900/50 text-gray-500 hover:bg-zinc-800'
+    `flex-1 py-3 px-4 text-center font-semibold transition-all duration-300 flex items-center justify-center gap-2 rounded-t-2xl ${
+      mode === tabMode 
+        ? 'bg-[#2B273A] text-[#F0F0F0] shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f]' 
+        : 'bg-transparent text-[#F0F0F0]/60 hover:bg-[#201D2B]/50'
     }`;
 
   const isGeneralDisabled = mode === InputMode.TEXT && !text.trim();
   const isVisualDisabled = (mode === InputMode.TEXT && !text.trim()) || (mode === InputMode.IMAGE && !file);
 
-  const baseButtonClass = "w-full font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:bg-zinc-800 disabled:text-gray-500 disabled:cursor-not-allowed";
+  const baseButtonClass = "w-full font-bold py-3 px-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const raisedButtonShadow = "shadow-[5px_5px_10px_#1b1825,-5px_-5px_10px_#3b364f] hover:shadow-[2px_2px_5px_#1b1825,-2px_-2px_5px_#3b364f] active:shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f] disabled:shadow-none";
+  const insetStyle = "shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f]";
 
   return (
-    <div className="bg-zinc-900 rounded-xl shadow-lg border border-zinc-800 flex flex-col h-full">
-      <div className="flex border-b border-zinc-800">
+    <div className="bg-[#2B273A] rounded-3xl shadow-[8px_8px_16px_#1b1825,-8px_-8px_16px_#3b364f] flex flex-col h-full overflow-hidden">
+      <div className="flex bg-[#201D2B] rounded-t-3xl">
         <button onClick={() => setMode(InputMode.TEXT)} className={tabClass(InputMode.TEXT)}>
           <TextIcon /> {t('generateFromText')}
         </button>
@@ -79,14 +83,14 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={t('textPlaceholder')}
-            className="w-full flex-grow p-4 bg-zinc-950 rounded-lg border border-zinc-700 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors resize-none text-gray-300"
+            className={`w-full flex-grow p-4 bg-[#2B273A] rounded-2xl border-none focus:outline-none focus:shadow-[inset_3px_3px_7px_#1b1825,inset_-3px_-3px_7px_#3b364f] transition-shadow resize-none text-[#F0F0F0] placeholder:text-[#F0F0F0]/40 ${insetStyle}`}
             rows={10}
             disabled={isLoading}
           />
         ) : (
           <>
             <div 
-              className="flex-grow flex flex-col items-center justify-center border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-teal-500 hover:bg-zinc-800/50"
+              className={`flex-grow flex flex-col items-center justify-center rounded-2xl p-6 text-center cursor-pointer transition-colors bg-[#2B273A] ${insetStyle}`}
               onClick={() => fileInputRef.current?.click()}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
@@ -96,18 +100,18 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
                 <img src={preview} alt="Preview" className="max-h-64 object-contain rounded-lg" />
               ) : (
                 <>
-                  <ImageUploadIcon className="h-12 w-12 text-gray-600 mb-4" />
-                  <p className="font-semibold text-gray-400">{t('dragDrop')}</p>
-                  <p className="text-sm text-gray-500">{t('clickToBrowse')}</p>
+                  <ImageUploadIcon className="h-12 w-12 text-[#F0F0F0]/30 mb-4" />
+                  <p className="font-semibold text-[#F0F0F0]">{t('dragDrop')}</p>
+                  <p className="text-sm text-[#F0F0F0]/50">{t('clickToBrowse')}</p>
                 </>
               )}
-              {file && <p className="mt-4 text-sm text-gray-500">{file.name}</p>}
+              {file && <p className="mt-4 text-sm text-[#F0F0F0]/50">{file.name}</p>}
             </div>
             <textarea
               value={videoDescription}
               onChange={(e) => setVideoDescription(e.target.value)}
               placeholder={t('videoPlaceholder')}
-              className="w-full p-4 bg-zinc-950 rounded-lg border border-zinc-700 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors resize-none text-gray-300"
+              className={`w-full p-4 bg-[#2B273A] rounded-2xl border-none focus:outline-none focus:shadow-[inset_3px_3px_7px_#1b1825,inset_-3px_-3px_7px_#3b364f] transition-shadow resize-none text-[#F0F0F0] placeholder:text-[#F0F0F0]/40 ${insetStyle}`}
               rows={3}
               disabled={isLoading || !file}
             />
@@ -122,12 +126,12 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
         )}
       </div>
 
-      <div className="p-6 border-t border-zinc-800 space-y-4">
+      <div className="p-6 bg-[#2B273A] space-y-4">
          {mode === InputMode.TEXT && (
             <button
                 onClick={handleGeneralSubmit}
                 disabled={isLoading || isGeneralDisabled}
-                className={`${baseButtonClass} bg-zinc-700 text-white hover:bg-zinc-600`}
+                className={`${baseButtonClass} bg-[#2B273A] text-[#F0F0F0] ${raisedButtonShadow}`}
             >
                 {isLoading ? <Loader /> : t('ogolnyButton')}
             </button>
@@ -136,14 +140,14 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
         <button
             onClick={() => handleImageSubmit(false)}
             disabled={isLoading || isVisualDisabled}
-            className={`${baseButtonClass} bg-teal-600 text-white hover:bg-teal-700`}
+            className={`${baseButtonClass} bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
         >
             {isLoading ? <Loader /> : t('obrazButton')}
         </button>
         <button
             onClick={() => handleImageSubmit(true)}
             disabled={isLoading || isVisualDisabled}
-            className={`${baseButtonClass} bg-zinc-700 text-white hover:bg-zinc-600`}
+            className={`${baseButtonClass} bg-[#2B273A] text-[#F0F0F0] ${raisedButtonShadow}`}
         >
             {isLoading ? <Loader /> : t('zaawansowanyObrazButton')}
         </button>
