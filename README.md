@@ -18,18 +18,6 @@
 ### 🇬🇧 (EN)
 **Prompt Wizard** is your intelligent assistant for prompt engineering. It effortlessly transforms your simple ideas into detailed, effective prompts for AI models like Midjourney, Stable Diffusion, and DALL-E 3. Whether you're working with text or images, Prompt Wizard is your go-to tool for crafting the perfect query.
 
----
-
-<div align="center">
-
-**[Tutaj wstaw GIF-a pokazującego działanie aplikacji / Insert a GIF showcasing the app here]**
-
-*A screen recording showing the workflow: from typing 'a cat on Mars' to copying the final, advanced prompt.*
-
-</div>
-
----
-
 ## ✨ Kluczowe Funkcje / Key Features
 
 -   **Wielomodalne Wejście / Multimodal Input**: Generuj prompty na podstawie prostego **tekstu** lub poprzez analizę przesłanego **obrazu**.
@@ -48,7 +36,7 @@
 
 1.  **Wybierz tryb / Choose your mode**: Zacznij od tekstu (`Generate from Text`) lub obrazu (`Generate from Image`).
 2.  **Dostarcz dane / Provide input**: Wpisz swój pomysł, wklej tekst lub po prostu przeciągnij i upuść obraz.
-3.  **Wybierz typ promptu / Select prompt type**:
+3.  **Wybierz typ promptu / elect prompt type**:
     -   `General`: Dla zadań tekstowych (np. "stwórz skrypt").
     -   `Image`: Szybki, zwięzły prompt do generowania obrazów.
     -   `Details`: Zaawansowany, modularny prompt do precyzyjnego dostosowywania obrazów.
@@ -81,4 +69,4 @@ Masz pomysł na ulepszenie? Chcesz naprawić błąd? Kontrybucje są mile widzia
 2.  Stwórz nową gałąź / Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
 3.  Zacommituj swoje zmiany / Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
 4.  Wypchnij zmiany na swoją gałąź / Push to the Branch (`git push origin feature/AmazingFeature`).
-5.  Otwórz Pull Request / Open a Pull Request.
+5.  Otwórz Pull Request / Open a Pull Requ
