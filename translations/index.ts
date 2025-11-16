@@ -8,9 +8,9 @@ export const translations = {
       dragDrop: 'Przeciągnij i upuść obraz',
       clickToBrowse: 'lub kliknij, aby przeglądać',
       videoPlaceholder: 'Opcjonalnie: Opisz scenę wideo...',
-      ogolnyButton: 'Ogólny',
-      obrazButton: 'Obraz',
-      zaawansowanyObrazButton: 'Szczegóły',
+      professionalButton: 'Profesjonalny',
+      compactButton: 'Kompaktowy',
+      detailedButton: 'Szczegółowy',
       includeImageDetailsLabel: 'Uwzględnij szczegóły obrazu',
 
       // OutputPanel
@@ -57,9 +57,9 @@ export const translations = {
       dragDrop: 'Drag & drop an image here',
       clickToBrowse: 'or click to browse',
       videoPlaceholder: 'Optional: Describe the video scene...',
-      ogolnyButton: 'General',
-      obrazButton: 'Image',
-      zaawansowanyObrazButton: 'Details',
+      professionalButton: 'Professional',
+      compactButton: 'Compact',
+      detailedButton: 'Detailed',
       includeImageDetailsLabel: 'Include image details',
 
       // OutputPanel

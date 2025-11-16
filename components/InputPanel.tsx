@@ -131,9 +131,9 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
             <button
                 onClick={handleGeneralSubmit}
                 disabled={isLoading || isGeneralDisabled}
-                className={`${baseButtonClass} bg-[#2B273A] text-[#F0F0F0] ${raisedButtonShadow}`}
+                className={`${baseButtonClass} bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
             >
-                {isLoading ? <Loader /> : t('ogolnyButton')}
+                {isLoading ? <Loader /> : t('professionalButton')}
             </button>
          )}
 
@@ -142,14 +142,14 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
             disabled={isLoading || isVisualDisabled}
             className={`${baseButtonClass} bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
         >
-            {isLoading ? <Loader /> : t('obrazButton')}
+            {isLoading ? <Loader /> : t('compactButton')}
         </button>
         <button
             onClick={() => handleImageSubmit(true)}
             disabled={isLoading || isVisualDisabled}
-            className={`${baseButtonClass} bg-[#2B273A] text-[#F0F0F0] ${raisedButtonShadow}`}
+            className={`${baseButtonClass} bg-[#F0C38E] text-[#312C51] ${raisedButtonShadow}`}
         >
-            {isLoading ? <Loader /> : t('zaawansowanyObrazButton')}
+            {isLoading ? <Loader /> : t('detailedButton')}
         </button>
       </div>
     </div>
