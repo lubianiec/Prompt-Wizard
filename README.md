@@ -20,17 +20,6 @@ Masz genialny pomysł, ale nie wiesz, jak go opisać, by AI Cię zrozumiało? **
 
 Got a brilliant idea but don't know how to ask an AI to create it? **Prompt Wizard** is your magic wand! 🧙‍♂️ Turn simple thoughts into powerful, precise prompts that conjure exactly what you want from models like Midjourney, Stable Diffusion, and DALL-E 3. Whether you're starting with a few words or an existing image, unleash your creativity without limits!
 
----
-
-<div align="center">
-
-**[Tutaj wstaw GIF-a pokazującego działanie aplikacji / Insert a GIF showcasing the app here]**
-
-*A screen recording showing the workflow: from typing 'a cat on Mars' to copying the final, advanced prompt.*
-
-</div>
-
----
 
 ## ✨ Kluczowe Funkcje / Key Features
 
