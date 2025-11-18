@@ -65,11 +65,13 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
     }
   };
   
-  const tabClass = (tabMode: InputMode) => 
+  const tabClass = (tabMode: InputMode, isDisabled: boolean = false) => 
     `flex-1 py-3 px-4 text-center font-semibold transition-all duration-300 flex items-center justify-center gap-2 rounded-t-2xl ${
-      mode === tabMode 
-        ? 'bg-[#2B273A] text-[#F0F0F0] shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f]' 
-        : 'bg-transparent text-[#F0F0F0]/60 hover:bg-[#201D2B]/50'
+      isDisabled 
+        ? 'bg-transparent text-[#F0F0F0]/30 cursor-not-allowed opacity-50' 
+        : mode === tabMode 
+          ? 'bg-[#2B273A] text-[#F0F0F0] shadow-[inset_5px_5px_10px_#1b1825,inset_-5px_-5px_10px_#3b364f]' 
+          : 'bg-transparent text-[#F0F0F0]/60 hover:bg-[#201D2B]/50'
     }`;
   
   const isGeneralDisabled = mode === InputMode.TEXT && !text.trim();
@@ -94,7 +96,12 @@ const InputPanel: React.FC<InputPanelProps> = ({ mode, setMode, onGenerate, isLo
         <button onClick={() => setMode(InputMode.TEXT)} className={tabClass(InputMode.TEXT)}>
           <TextIcon /> {t('generateFromText')}
         </button>
-        <button onClick={() => setMode(InputMode.IMAGE)} className={tabClass(InputMode.IMAGE)}>
+        <button 
+          onClick={() => setMode(InputMode.IMAGE)} 
+          className={tabClass(InputMode.IMAGE, true)}
+          disabled={true}
+          title="Image generation temporarily disabled"
+        >
           <ImageUploadIcon /> {t('generateFromImage')}
         </button>
       </div>
